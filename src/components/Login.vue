@@ -50,19 +50,19 @@
             resetForm(formName){
                 this.$refs[formName].resetFields();
             },
+            //登录方法
             submit(){
                 //获取表单数据并验证
-                this.$refs.loginFormRef.validate(async alid => {
-                    if (!alid) return;
-                    // 调用get请求
-                    const {data :res} = await this.$http.post("test");
-                    if (res == "health" ) {
-                        window.sessionStorage.setItem('flag','ok'); // session 放置
-                        this.$message.success("登录成功！！！");
-                        // this.$router.push({ path: "/home"});
-                    }else{
-                        this.$message.error("登录失败！！！");
-                    }
+                this.$refs.loginFormRef.validate( (valid) => {
+                    if (!valid) return; //验证失败
+                    this.$http.post("login",this.loginForm).then(res=>{
+                        if (res.data == "health" ) {
+                            this.$message.success("登录成功！！！");
+                            this.$router.push( "/home");  //路由跳转
+                        }else{
+                            this.$message.error("登录失败！！！");
+                        }
+                    }); //获取后台数据
                 });
             }
         }
@@ -93,11 +93,12 @@
             border: 1px solid #eee;
             border-radius: 50%; // 加圆角
             padding: 10px;
-            box-shadow: 0 0 10px #ddd;// 盒子阴影
+            box-shadow: 0 0 10px #ddd; // 盒子阴影
             position: absolute;
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #0ee;
+
             img {
                 width: 100%;
                 height: 100%;
@@ -105,22 +106,27 @@
                 background-color: #eee;
             }
         }
+
         .btns {
-            display: flex;// 弹性布局
+            display: flex; // 弹性布局
             justify-content: flex-end; // 尾部对齐
             /*position: relative;*/
             /*left: 50%;*/
             /*transform: translate(-50%, -50%);*/
         }
-        .login_form {
-            position: relative;
-            width: 300px;
-            top: 50px;
-            padding: 50px 10px;
 
-            box-sizing: border-box; // 设置边框
+        /*.login_form {*/
+        /*    position: relative;*/
+        /*    width: 300px;*/
+        /*    top: 50px;*/
+        /*    padding: 50px 10px;*/
 
-        }
+        /*    box-sizing: border-box; // 设置边框*/
+
+        /*}*/
+
+
+
     }
 
 </style>
